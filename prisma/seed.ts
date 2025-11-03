@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -11,6 +12,7 @@ async function main() {
   await prisma.labTest.deleteMany()
   await prisma.test.deleteMany()
   await prisma.lab.deleteMany()
+  await prisma.user.deleteMany()
 
   // Create Tests
   const tests = await Promise.all([
@@ -98,79 +100,134 @@ async function main() {
 
   console.log(`Created ${tests.length} tests`)
 
-  // Create Labs
-  const labs = await Promise.all([
-    prisma.lab.create({
+  // Create Lab Users first (required for labs)
+  const hashedPassword = await bcrypt.hash('lab123456', 10)
+  
+  const labUsers = await Promise.all([
+    prisma.user.create({
       data: {
-        name: 'City Diagnostics Center',
-        address: '123 Main Street, Sector 15',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        pincode: '400070',
-        phone: '+91-22-1234-5678',
         email: 'mumbai@citydiagnostics.com',
-        latitude: 19.0760,
-        longitude: 72.8777,
-        isActive: true,
+        name: 'City Diagnostics Admin',
+        phone: '+91-22-1234-5678',
+        password: hashedPassword,
+        role: 'LAB',
+        labProfile: {
+          create: {
+            name: 'City Diagnostics Center',
+            address: '123 Main Street, Sector 15',
+            city: 'Mumbai',
+            state: 'Maharashtra',
+            pincode: '400070',
+            phone: '+91-22-1234-5678',
+            email: 'mumbai@citydiagnostics.com',
+            latitude: 19.0760,
+            longitude: 72.8777,
+            isActive: true,
+          },
+        },
       },
+      include: { labProfile: true },
     }),
-    prisma.lab.create({
+    prisma.user.create({
       data: {
-        name: 'Metro Health Labs',
-        address: '456 Park Avenue, Koramangala',
-        city: 'Bangalore',
-        state: 'Karnataka',
-        pincode: '560095',
-        phone: '+91-80-2345-6789',
         email: 'bangalore@metrohealth.com',
-        latitude: 12.9352,
-        longitude: 77.6245,
-        isActive: true,
+        name: 'Metro Health Admin',
+        phone: '+91-80-2345-6789',
+        password: hashedPassword,
+        role: 'LAB',
+        labProfile: {
+          create: {
+            name: 'Metro Health Labs',
+            address: '456 Park Avenue, Koramangala',
+            city: 'Bangalore',
+            state: 'Karnataka',
+            pincode: '560095',
+            phone: '+91-80-2345-6789',
+            email: 'bangalore@metrohealth.com',
+            latitude: 12.9352,
+            longitude: 77.6245,
+            isActive: true,
+          },
+        },
       },
+      include: { labProfile: true },
     }),
-    prisma.lab.create({
+    prisma.user.create({
       data: {
-        name: 'Prime Medical Laboratory',
-        address: '789 MG Road, Connaught Place',
-        city: 'New Delhi',
-        state: 'Delhi',
-        pincode: '110001',
-        phone: '+91-11-3456-7890',
         email: 'delhi@primemedical.com',
-        latitude: 28.6139,
-        longitude: 77.2090,
-        isActive: true,
+        name: 'Prime Medical Admin',
+        phone: '+91-11-3456-7890',
+        password: hashedPassword,
+        role: 'LAB',
+        labProfile: {
+          create: {
+            name: 'Prime Medical Laboratory',
+            address: '789 MG Road, Connaught Place',
+            city: 'New Delhi',
+            state: 'Delhi',
+            pincode: '110001',
+            phone: '+91-11-3456-7890',
+            email: 'delhi@primemedical.com',
+            latitude: 28.6139,
+            longitude: 77.2090,
+            isActive: true,
+          },
+        },
       },
+      include: { labProfile: true },
     }),
-    prisma.lab.create({
+    prisma.user.create({
       data: {
-        name: 'Wellness Diagnostic Hub',
-        address: '321 Whitefield Main Road',
-        city: 'Bangalore',
-        state: 'Karnataka',
-        pincode: '560066',
-        phone: '+91-80-4567-8901',
         email: 'whitefield@wellnesshub.com',
-        latitude: 12.9698,
-        longitude: 77.7499,
-        isActive: true,
+        name: 'Wellness Hub Admin',
+        phone: '+91-80-4567-8901',
+        password: hashedPassword,
+        role: 'LAB',
+        labProfile: {
+          create: {
+            name: 'Wellness Diagnostic Hub',
+            address: '321 Whitefield Main Road',
+            city: 'Bangalore',
+            state: 'Karnataka',
+            pincode: '560066',
+            phone: '+91-80-4567-8901',
+            email: 'whitefield@wellnesshub.com',
+            latitude: 12.9698,
+            longitude: 77.7499,
+            isActive: true,
+          },
+        },
       },
+      include: { labProfile: true },
     }),
-    prisma.lab.create({
+    prisma.user.create({
       data: {
-        name: 'Alpha Health Diagnostics',
-        address: '654 Andheri West, Link Road',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        pincode: '400053',
-        phone: '+91-22-5678-9012',
         email: 'andheri@alphahealth.com',
-        latitude: 19.1334,
-        longitude: 72.8267,
-        isActive: true,
+        name: 'Alpha Health Admin',
+        phone: '+91-22-5678-9012',
+        password: hashedPassword,
+        role: 'LAB',
+        labProfile: {
+          create: {
+            name: 'Alpha Health Diagnostics',
+            address: '654 Andheri West, Link Road',
+            city: 'Mumbai',
+            state: 'Maharashtra',
+            pincode: '400053',
+            phone: '+91-22-5678-9012',
+            email: 'andheri@alphahealth.com',
+            latitude: 19.1334,
+            longitude: 72.8267,
+            isActive: true,
+          },
+        },
       },
+      include: { labProfile: true },
     }),
   ])
+
+  // Extract labs from users
+  const labs = labUsers.map(user => user.labProfile!).filter(Boolean)
 
   console.log(`Created ${labs.length} labs`)
 
