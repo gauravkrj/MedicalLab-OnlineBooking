@@ -40,7 +40,7 @@ export function useLocation() {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          const newLocation = {
+          const newLocation: Location = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           }
