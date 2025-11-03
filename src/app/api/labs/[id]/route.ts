@@ -3,10 +3,11 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const lab = await prisma.lab.findUnique({ where: { id: params.id } })
+    const { id } = await params
+    const lab = await prisma.lab.findUnique({ where: { id } })
     if (!lab) {
       return NextResponse.json({ error: 'Lab not found' }, { status: 404 })
     }

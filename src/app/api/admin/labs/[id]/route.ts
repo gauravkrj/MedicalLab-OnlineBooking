@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -17,6 +17,7 @@ export async function PATCH(
       )
     }
 
+    const { id } = await params
     const body = await request.json()
     const { isVerified, isActive } = body
 
@@ -29,7 +30,7 @@ export async function PATCH(
     }
 
     const lab = await prisma.lab.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         user: {

@@ -5,9 +5,10 @@ import { prisma } from '@/lib/prisma'
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
 
     if (!session || session.user.role !== 'LAB' || !session.user.labId) {
@@ -18,7 +19,7 @@ export async function DELETE(
     }
 
     const test = await prisma.test.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!test) {
@@ -36,7 +37,7 @@ export async function DELETE(
     }
 
     await prisma.test.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ message: 'Test deleted successfully' })
