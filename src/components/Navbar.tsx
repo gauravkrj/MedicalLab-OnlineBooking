@@ -137,6 +137,24 @@ export default function Navbar() {
             >
               Find Labs
             </Link>
+            {session?.user?.role === 'LAB' && (
+              <Link 
+                href="/lab/dashboard" 
+                className="block text-gray-300 hover:text-white transition-colors py-2 px-4 glass rounded-lg hover:bg-white/10"
+                onClick={() => setIsOpen(false)}
+              >
+                Lab Dashboard
+              </Link>
+            )}
+            {session?.user?.role === 'ADMIN' && (
+              <Link 
+                href="/admin/dashboard" 
+                className="block text-gray-300 hover:text-white transition-colors py-2 px-4 glass rounded-lg hover:bg-white/10"
+                onClick={() => setIsOpen(false)}
+              >
+                Admin Dashboard
+              </Link>
+            )}
             {session?.user?.role === 'USER' && (
               <Link 
                 href="/bookings" 
