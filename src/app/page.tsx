@@ -37,7 +37,9 @@ export default function HomePage() {
 
       const response = await fetch(`/api/tests?${params.toString()}`)
       const data = await response.json()
-      setTests(data)
+      // Guard against non-array responses (e.g., error objects)
+      const testsArray = Array.isArray(data) ? data : (Array.isArray((data as any)?.tests) ? (data as any).tests : [])
+      setTests(testsArray)
               // Also fetch labs within radius for second section
               if (session && location.latitude && location.longitude) {
                 const labParams = new URLSearchParams()
@@ -46,7 +48,10 @@ export default function HomePage() {
                 const labsRes = await fetch(`/api/labs?${labParams.toString()}`)
                 if (labsRes.ok) {
                   const labsData = await labsRes.json()
-                  setLabs(labsData)
+                  const labsArray = Array.isArray(labsData) ? labsData : (Array.isArray((labsData as any)?.labs) ? (labsData as any).labs : [])
+                  setLabs(labsArray)
+                } else {
+                  setLabs([])
                 }
               }
     } catch (error) {

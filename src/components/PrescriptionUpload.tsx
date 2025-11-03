@@ -48,11 +48,15 @@ export default function PrescriptionUpload({ onUploadComplete }: PrescriptionUpl
         setUploadedUrl(data.url)
         onUploadComplete(data.url)
       } else {
-        alert('Upload failed. Please try again.')
+        const errorData = await response.json().catch(() => ({ error: 'Upload failed' }))
+        const errorMessage = errorData.error || 'Upload failed. Please try again.'
+        console.error('Upload error:', errorMessage)
+        alert(errorMessage)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading file:', error)
-      alert('Upload failed. Please try again.')
+      const errorMessage = error?.message || 'Upload failed. Please check your connection and try again.'
+      alert(errorMessage)
     } finally {
       setUploading(false)
     }

@@ -62,8 +62,8 @@ export async function POST(request: Request) {
               pincode,
               phone: labPhone || phone,
               email,
-              latitude: latitude ? parseFloat(latitude) : null,
-              longitude: longitude ? parseFloat(longitude) : null,
+              latitude: typeof latitude === 'number' ? latitude : (latitude ? parseFloat(latitude) : null),
+              longitude: typeof longitude === 'number' ? longitude : (longitude ? parseFloat(longitude) : null),
             },
           },
         }),
@@ -85,10 +85,14 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     )
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating user:', error)
+    const message =
+      (error?.code && error?.meta?.target)
+        ? `Database error (${error.code}) on ${error.meta.target}`
+        : (error?.message || 'Failed to create account')
     return NextResponse.json(
-      { error: 'Failed to create account' },
+      { error: message },
       { status: 500 }
     )
   }

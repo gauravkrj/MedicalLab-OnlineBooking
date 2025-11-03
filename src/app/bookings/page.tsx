@@ -1,26 +1,50 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Calendar, Clock, MapPin, Phone, IndianRupee } from 'lucide-react'
 import { Booking } from '@/types'
 
 export default function BookingsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchBookings()
-  }, [])
+    if (status === 'unauthenticated') {
+      router.push('/login')
+      return
+    }
+    if (session?.user?.role !== 'USER') {
+      router.push('/')
+      return
+    }
+    if (session?.user?.role === 'USER') {
+      fetchBookings()
+    }
+  }, [session, status, router])
 
   const fetchBookings = async () => {
     try {
       setLoading(true)
       const response = await fetch('/api/bookings')
       const data = await response.json()
-      setBookings(data)
+      
+      // Ensure bookings is always an array
+      if (Array.isArray(data)) {
+        setBookings(data)
+      } else if (data.error) {
+        console.error('Error fetching bookings:', data.error)
+        setBookings([]) // Set empty array on error
+      } else {
+        setBookings([]) // Default to empty array if response is unexpected
+      }
     } catch (error) {
       console.error('Error fetching bookings:', error)
+      setBookings([]) // Set empty array on error
     } finally {
       setLoading(false)
     }
@@ -49,7 +73,7 @@ export default function BookingsPage() {
     })
   }
 
-  if (loading) {
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,12 +83,19 @@ export default function BookingsPage() {
     )
   }
 
+  if (!session || session.user.role !== 'USER') {
+    return null
+  }
+
+  // Safety check: ensure bookings is always an array
+  const safeBookings = Array.isArray(bookings) ? bookings : []
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">My Bookings</h1>
 
-        {bookings.length === 0 ? (
+        {safeBookings.length === 0 ? (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
             <p className="text-gray-500 text-lg mb-4">No bookings found</p>
             <Link
@@ -76,7 +107,7 @@ export default function BookingsPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            {bookings.map((booking) => (
+            {safeBookings.map((booking) => (
               <div key={booking.id} className="bg-white rounded-lg shadow-md p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>

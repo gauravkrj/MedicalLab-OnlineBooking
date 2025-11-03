@@ -21,7 +21,11 @@ export default function NewTestPage() {
   const [error, setError] = useState('')
 
   if (status === 'loading') {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+        <div className="text-white">Loading...</div>
+      </div>
+    )
   }
 
   if (!session || session.user.role !== 'LAB') {
@@ -59,28 +63,28 @@ export default function NewTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           href="/lab/tests"
-          className="flex items-center text-primary-600 hover:text-primary-700 mb-8"
+          className="flex items-center text-emerald-400 hover:text-emerald-300 mb-8"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Tests
         </Link>
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Add New Test</h1>
+        <div className="glass-dark rounded-2xl p-8 border border-white/10">
+          <h1 className="text-3xl font-bold text-white mb-8">Add New Test</h1>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+            <div className="glass rounded-xl p-4 border-red-500/30 bg-red-500/10 text-red-300 mb-6">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
                 Test Name *
               </label>
               <input
@@ -88,27 +92,27 @@ export default function NewTestPage() {
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-3.5 glass rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
                 placeholder="e.g., Complete Blood Count (CBC)"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
                 Description
               </label>
               <textarea
                 rows={4}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-3.5 glass rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all resize-none"
                 placeholder="Describe what this test includes..."
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
                   Category *
                 </label>
                 <input
@@ -116,13 +120,13 @@ export default function NewTestPage() {
                   required
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3.5 glass rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
                   placeholder="e.g., Blood Test"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
                   Price (₹) *
                 </label>
                 <input
@@ -132,7 +136,7 @@ export default function NewTestPage() {
                   step="0.01"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3.5 glass rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
                   placeholder="0.00"
                 />
               </div>
@@ -140,7 +144,7 @@ export default function NewTestPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
                   Duration (Days for Results)
                 </label>
                 <input
@@ -148,24 +152,24 @@ export default function NewTestPage() {
                   min="1"
                   value={formData.duration}
                   onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3.5 glass rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
                   placeholder="e.g., 2"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
                   Test Type *
                 </label>
                 <select
                   required
                   value={formData.testType}
                   onChange={(e) => setFormData({ ...formData, testType: e.target.value as 'HOME_TEST' | 'CLINIC_TEST' })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-4 py-3.5 glass rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
                 >
-                  <option value="CLINIC_TEST">Test at Clinic</option>
-                  <option value="HOME_TEST">Home Test</option>
+                  <option className="bg-gray-900" value="CLINIC_TEST">Test at Clinic</option>
+                  <option className="bg-gray-900" value="HOME_TEST">Home Test</option>
                 </select>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-400 mt-1">
                   {formData.testType === 'HOME_TEST' 
                     ? 'Test can be done at patient\'s home'
                     : 'Test must be done at clinic'}
@@ -177,14 +181,14 @@ export default function NewTestPage() {
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg hover:bg-gray-300 transition font-semibold"
+                className="flex-1 glass text-gray-200 py-3 rounded-lg hover:bg-white/10 transition font-semibold border border-white/10"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 transition font-semibold disabled:bg-gray-400"
+                className="flex-1 gradient-primary text-white py-3 rounded-lg transition font-semibold disabled:opacity-50"
               >
                 {loading ? 'Creating...' : 'Create Test'}
               </button>
