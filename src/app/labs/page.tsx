@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Search, MapPin } from 'lucide-react'
 import LocationInput from '@/components/LocationInput'
-import LabCard from '@/components/LabCard'
-import { Lab, Test } from '@/types'
+import { Lab } from '@/types'
 
 export default function LabsPage() {
   const [labs, setLabs] = useState<Lab[]>([])
@@ -31,15 +30,6 @@ export default function LabsPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  // Mock test for LabCard - in a real app, you'd have test selection
-  const mockTest: Test = {
-    id: 'mock',
-    name: 'Test',
-    category: 'General',
-    price: 0,
-    isActive: true,
   }
 
   return (
