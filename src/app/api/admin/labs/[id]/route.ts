@@ -3,11 +3,23 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Lab ID is required' },
+        { status: 400 }
+      )
+    }
+
     const session = await getServerSession(authOptions)
 
     if (!session || session.user.role !== 'ADMIN') {
@@ -17,7 +29,6 @@ export async function PATCH(
       )
     }
 
-    const { id } = await params
     const body = await request.json()
     const { isVerified, isActive } = body
 
