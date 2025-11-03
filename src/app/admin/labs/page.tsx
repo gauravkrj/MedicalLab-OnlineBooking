@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -24,7 +24,7 @@ interface Lab {
   }
 }
 
-export default function AdminLabsPage() {
+function AdminLabsContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -203,6 +203,14 @@ export default function AdminLabsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AdminLabsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <AdminLabsContent />
+    </Suspense>
   )
 }
 

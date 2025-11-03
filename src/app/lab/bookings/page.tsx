@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Calendar, Clock, MapPin, Phone, IndianRupee, ArrowLeft } from 'lucide-react'
 import { Booking } from '@/types'
 
-export default function LabBookingsPage() {
+function LabBookingsContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -287,6 +287,14 @@ export default function LabBookingsPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function LabBookingsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <LabBookingsContent />
+    </Suspense>
   )
 }
 
