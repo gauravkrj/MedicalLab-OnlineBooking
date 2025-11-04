@@ -19,6 +19,12 @@ export interface Test {
   labId?: string | null
   labName?: string | null
   isActive: boolean
+  about?: string | null
+  parameters?: string | null
+  preparation?: string | null
+  why?: string | null
+  interpretations?: string | null
+  faqsJson?: Array<{ question: string; answer: string }>
 }
 
 export interface Lab {

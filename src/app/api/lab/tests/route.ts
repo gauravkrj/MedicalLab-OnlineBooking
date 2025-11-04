@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, description, category, price, duration, testType } = body
+    const { name, description, category, price, duration, testType, about, parameters, preparation, why, interpretations, faqsJson } = body
 
     if (!name || !category || !price || !testType) {
       return NextResponse.json(
@@ -64,6 +64,12 @@ export async function POST(request: Request) {
         testType: testType || 'CLINIC_TEST',
         labId: session.user.labId,
         isActive: true,
+        about: about || null,
+        parameters: parameters || null,
+        preparation: preparation || null,
+        why: why || null,
+        interpretations: interpretations || null,
+        faqsJson: Array.isArray(faqsJson) ? faqsJson : null,
       },
     })
 

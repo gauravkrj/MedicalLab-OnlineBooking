@@ -59,10 +59,10 @@ export default function TestCard({ test }: TestCardProps) {
       </div>
 
       <Link
-        href={test.labId ? `/tests/${test.id}?labId=${test.labId}` : `/tests/${test.id}`}
+        href={`/tests/${test.id}/info${test.labId ? `?labId=${test.labId}` : ''}`}
         className="group/btn flex items-center justify-center w-full gradient-primary text-white py-3 rounded-xl hover:scale-105 transition-all duration-300 font-semibold"
       >
-        Book Test
+        View Test
         <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
       </Link>
     </div>
