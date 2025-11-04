@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -81,7 +82,9 @@ export async function PATCH(
         ...(preparation !== undefined && { preparation }),
         ...(why !== undefined && { why }),
         ...(interpretations !== undefined && { interpretations }),
-        ...(faqsJson !== undefined && { faqsJson: Array.isArray(faqsJson) ? faqsJson : null }),
+        ...(faqsJson !== undefined && { 
+          faqsJson: Array.isArray(faqsJson) ? faqsJson : Prisma.JsonNull 
+        }),
         ...(typeof isActive === 'boolean' && { isActive }),
       },
     })
